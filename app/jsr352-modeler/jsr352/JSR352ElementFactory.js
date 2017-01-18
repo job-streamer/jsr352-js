@@ -1,6 +1,7 @@
 'use strict';
 
 var assign = require('lodash/object/assign'),
+    defaults = require('lodash/object/defaults'),
     inherits = require('inherits'),
     is = require('bpmn-js/lib/util/ModelUtil').is,
     isAny = require('bpmn-js/lib/features/modeling/util/ModelingUtil').isAny;
@@ -48,7 +49,7 @@ function JSR352ElementFactory(bpmnFactory, moddle, translate) {
 
       // add width and height if shape
       if (!/\:Connection$/.test(type)) {
-        assign(attrs, self._getCustomElementSize(type));
+        defaults(attrs, self._getCustomElementSize(type));
       }
 
       attrs = assign({
