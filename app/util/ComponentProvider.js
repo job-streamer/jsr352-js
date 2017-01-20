@@ -28,5 +28,8 @@ ComponentProvider.getItemProcessors = function () {
 ComponentProvider.getItemWriters = function () {
     return componentJSON["batch-component/item-writer"];
 };
+ComponentProvider.getListeners = function () {
+    return componentJSON["batch-component/listener"];
+};
 
 module.exports = ComponentProvider;
