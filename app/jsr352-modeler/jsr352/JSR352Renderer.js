@@ -28,15 +28,6 @@ function extractClassName(str) {
     return array[array.length - 1];
 }
 
-function minifyClassName(str){
-    if(!str) {
-        return "";
-    } else if(str.length < 5){
-        return str;
-    }
-    return str.substring(0,4) + "...";
-}
-
 /**
  * A renderer that knows how to render custom elements.
  */
@@ -190,7 +181,7 @@ JSR352Renderer.prototype.drawShape = function(p, element) {
                        align: 'center-middle',
                        padding: 1,
                        style: {fill: '#ffffff'}});
-    this.renderLabel(p,minifyClassName(extractClassName(element.businessObject.ref)),
+    this.renderLabel(p,extractClassName(element.businessObject.ref),
                      {
                        box: {width: element.width - 20, height: element.height, x: 20, y: 0},
                        align: 'center-middle',
@@ -209,7 +200,7 @@ JSR352Renderer.prototype.drawShape = function(p, element) {
                        align: 'center-middle',
                        padding: 1,
                        style: {fill: '#ffffff'}});
-    this.renderLabel(p,minifyClassName(extractClassName(element.businessObject.ref)),
+    this.renderLabel(p,extractClassName(element.businessObject.ref),
                      {
                        box: {width: element.width - 20, height: element.height, x: 20, y: 0},
                        align: 'center-middle',
@@ -228,7 +219,7 @@ JSR352Renderer.prototype.drawShape = function(p, element) {
                        align: 'center-middle',
                        padding: 1,
                        style: {fill: '#ffffff'}});
-    this.renderLabel(p,minifyClassName(extractClassName(element.businessObject.ref)),
+    this.renderLabel(p,extractClassName(element.businessObject.ref),
                      {
                        box: {width: element.width - 20, height: element.height, x: 20, y: 0},
                        align: 'center-middle',
