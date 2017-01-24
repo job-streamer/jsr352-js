@@ -31,7 +31,16 @@ function JSR352Updater(eventBus, bpmnjs, elementFactory, bpmnFactory) {
         parent: parent
       });
     bpmnjs.get('canvas').addShape(shape, parent);
+    
+    if (!parent.businessObject.flowElements) {
+      parent.businessObject.flowElements =  [];
+    }
+    shape.businessObject.$parent=parent.businessObject;
+    assign(shape.businessObject, pick(shape, [ 'x', 'y' ]));
+    Collections.add(parent.businessObject.flowElements, shape.businessObject);
     Collections.add(bpmnjs._customElements, shape.businessObject);
+    assign(shape.businessObject.di.bounds,pick(shape, [ 'x', 'y', 'width','height' ]));
+    Collections.add(bpmnjs.definitions.diagrams["0"].plane.planeElement, shape.businessObject.di);
   }
 
   CommandInterceptor.call(this, eventBus);
