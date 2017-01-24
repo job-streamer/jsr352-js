@@ -43,16 +43,6 @@
           "isAttr": false,
           "isMany": true,
           "type": "Listener"
-        },
-        {
-          "name": "chunk",
-          "isAttr": false,
-          "type": "Chunk"
-        },
-        {
-          "name": "batchlet",
-          "isAttr": false,
-          "type": "Batchlet"
         }
       ]
     },
@@ -107,21 +97,6 @@
           "name": "retry-limit",
           "isAttr": true,
           "type": "Integer"
-        },
-        {
-          "name": "reader",
-          "isAttr": false,
-          "type": "Reader"
-        },
-        {
-          "name": "processor",
-          "isAttr": false,
-          "type": "Processor"
-        },
-        {
-          "name": "writer",
-          "isAttr": false,
-          "type": "Writer"
         }
       ]
     },

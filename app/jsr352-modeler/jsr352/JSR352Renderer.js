@@ -135,6 +135,10 @@ JSR352Renderer.prototype.canRender = function(element) {
 
 JSR352Renderer.prototype.drawShape = function(p, element) {
   var type = element.type;
+  // temporary solution: Element.di.isExpanded should be set.
+  if (/^jsr352\:/.test(type)) {
+    element.collapsed = false;
+  }
   if (is(element, 'jsr352:Step')) {
     var step = this.drawRect(p, element.width, element.height, 10, 0);
     this.drawRect(p, 40,20, 0, 0);
