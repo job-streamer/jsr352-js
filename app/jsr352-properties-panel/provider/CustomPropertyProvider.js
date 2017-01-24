@@ -12,7 +12,7 @@ var eventProps = require('bpmn-js-properties-panel/lib/provider/bpmn/parts/Event
     linkProps = require('bpmn-js-properties-panel/lib/provider/bpmn/parts/LinkProps'),
     documentationProps = require('bpmn-js-properties-panel/lib/provider/bpmn/parts/DocumentationProps'),
     properties = require('bpmn-js-properties-panel/lib/provider/camunda/parts/PropertiesProps'),
-    nameProps = require('bpmn-js-properties-panel/lib/provider/bpmn/parts/NameProps');
+    nameProps = require('./parts/NameProps');
 
 
 // Require your custom property entries.

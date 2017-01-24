@@ -59,12 +59,12 @@ module.exports = function(grunt) {
           watch: true
         },
         files: {
-          '<%= config.dist %>/app.js': [ '<%= config.sources %>/app.js' ]
+          '<%= config.dist %>/jsr-352.js': [ '<%= config.sources %>/app.js' ]
         }
       },
       app: {
         files: {
-          '<%= config.dist %>/app.js': [ '<%= config.sources %>/app.js' ]
+          '<%= config.dist %>/jsr-352.js': [ '<%= config.sources %>/app.js' ]
         }
       }
     },
@@ -107,7 +107,7 @@ module.exports = function(grunt) {
       },
     styles: {
         files: {
-          'dist/css/app.css': 'styles/app.less'
+          'dist/css/jsr-352.css': 'styles/app.less'
         }
     }
   },

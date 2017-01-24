@@ -67,7 +67,7 @@
     "diagram-js": "^0.18.0",
     "inherits": "^2.0.1",
     "lodash": "^3.10.1",
-    "jquery": "^2.1.1",
-    "tiny-svg": "^0.1.0"
+    "tiny-svg": "^0.1.0",
+    "edn":"https://github.com/josh/js-edn.git"
   }
 }

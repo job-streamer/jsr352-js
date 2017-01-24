@@ -1,6 +1,7 @@
 'use strict';
 
 var assign = require('lodash/object/assign'),
+    defaults = require('lodash/object/defaults'),
     inherits = require('inherits'),
     is = require('bpmn-js/lib/util/ModelUtil').is,
     isAny = require('bpmn-js/lib/features/modeling/util/ModelingUtil').isAny;
@@ -48,7 +49,7 @@ function JSR352ElementFactory(bpmnFactory, moddle, translate) {
 
       // add width and height if shape
       if (!/\:Connection$/.test(type)) {
-        assign(attrs, self._getCustomElementSize(type));
+        defaults(attrs, self._getCustomElementSize(type));
       }
 
       attrs = assign({
@@ -96,11 +97,11 @@ JSR352ElementFactory.prototype._getCustomElementSize = function (type) {
     'jsr352:Split': { width: 600, height: 400 },
     'jsr352:Flow': { width: 400, height: 240 },
     'jsr352:Step': { width: 120, height: 100 },
-    'jsr352:Batchlet': { width: 100, height: 80 },
-    'jsr352:Chunk': { width: 100, height: 80 },
-    'jsr352:Reader': { width: 80, height: 20 },
-    'jsr352:Processor': { width: 80, height: 20 },
-    'jsr352:Writer': { width: 80, height: 20 },
+    'jsr352:Batchlet': { width: 220, height: 20 },
+    'jsr352:Chunk': { width: 230, height: 80 },
+    'jsr352:Reader': { width: 220, height: 20 },
+    'jsr352:Processor': { width: 220, height: 20 },
+    'jsr352:Writer': { width: 220, height: 20 },
     'jsr352:Start': { width: 40, height: 40 },
     'jsr352:End': { width: 40, height: 40 },
     'jsr352:Fail': { width: 40, height: 40 },

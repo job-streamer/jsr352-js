@@ -8,6 +8,9 @@ var is = require('bpmn-js/lib/util/ModelUtil').is,
     isAny = require('bpmn-js/lib/features/modeling/util/ModelingUtil').isAny,
     getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject;
 
+var componentProvider = require('../../../util/ComponentProvider');
+var selectOptionUtil = require('../../../util/SelectOptionUtil');
+
 function chunkChildEntry(element, bpmnFactory, id) {
   var typeName = id.replace(/\b\w/g, function(l){ return l.toUpperCase() })
   var entry = entryFactory.textBox({
@@ -69,12 +72,43 @@ module.exports = function(group, element, bpmnFactory) {
     }));
   }
 
-  if (isAny(element, ['jsr352:Batchlet', 'jsr352:Reader', 'jsr352:Writer', 'jsr352:Processor'])) {
-    group.entries.push(entryFactory.textBox({
+  if (is(element, 'jsr352:Batchlet')) {
+    group.entries.push(entryFactory.selectBox({
       id : 'ref',
       description : 'Specifies the name of a batch artifact.',
       label : 'Ref',
       modelProperty : 'ref',
+      selectOptions : selectOptionUtil.toSelectOption(componentProvider.getBatchlets())
+    }));
+  }
+
+  if (is(element, 'jsr352:Reader')) {
+    group.entries.push(entryFactory.selectBox({
+      id : 'ref',
+      description : 'Specifies the name of a batch artifact.',
+      label : 'Ref',
+      modelProperty : 'ref',
+      selectOptions : selectOptionUtil.toSelectOption(componentProvider.getItemReaders())
+    }));
+  }
+
+  if (is(element, 'jsr352:Writer')) {
+    group.entries.push(entryFactory.selectBox({
+      id : 'ref',
+      description : 'Specifies the name of a batch artifact.',
+      label : 'Ref',
+      modelProperty : 'ref',
+      selectOptions : selectOptionUtil.toSelectOption(componentProvider.getItemWriters())
+    }));
+  }
+
+  if (is(element, 'jsr352:Processor')) {
+    group.entries.push(entryFactory.selectBox({
+      id : 'ref',
+      description : 'Specifies the name of a batch artifact.',
+      label : 'Ref',
+      modelProperty : 'ref',
+      selectOptions : selectOptionUtil.toSelectOption(componentProvider.getItemProcessors())
     }));
   }
 

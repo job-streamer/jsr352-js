@@ -1,7 +1,5 @@
 'use strict';
 
-var domify = require('min-dom/lib/domify');
-
 var forEach = require('lodash/collection/forEach');
 
 var getBusinessObject = require('bpmn-js/lib/util/ModelUtil').getBusinessObject,
