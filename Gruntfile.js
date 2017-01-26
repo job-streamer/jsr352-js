@@ -119,7 +119,7 @@ module.exports = function(grunt) {
       beautify: false,//インデントやスペース入りでだすかどうか。
       mangle: false,//変数置換
       compress: true,//圧縮するかどうか。
-      sourceMap: false//ソースマップを出力するか。
+      sourceMap: true//ソースマップを出力するか。
     },
     build: {
       src: '<%= config.dist %>/jsr-352.js',
