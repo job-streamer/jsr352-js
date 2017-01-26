@@ -31,9 +31,9 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "brfs": "^1.2.0",
     "browserify": "^13.0.0",
     "chai": "^3.2.0",
-    "brfs": "^1.2.0",
     "grunt": "~0.4.4",
     "grunt-browserify": "^5.0.0",
     "grunt-cli": "^1.2.0",
@@ -41,8 +41,10 @@
     "grunt-contrib-copy": "~1.0.0",
     "grunt-contrib-jshint": "~1.0.0",
     "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "~1.0.0",
     "grunt-karma": "^1.0.0",
+    "jquery": "^2.1.1",
     "karma": "^0.13.0",
     "karma-browserify": "^5.0.1",
     "karma-chai": "^0.1.0",
@@ -58,8 +60,7 @@
     "mocha-test-container-support": "^0.2.0",
     "stringify": "^3.1.0",
     "time-grunt": "^0.3.2",
-    "watchify": "^3.7.0",
-    "jquery": "^2.1.1"
+    "watchify": "^3.7.0"
   },
   "dependencies": {
     "bpmn-js": "^0.18.0",
@@ -69,6 +70,6 @@
     "inherits": "^2.0.1",
     "lodash": "^3.10.1",
     "tiny-svg": "^0.1.0",
-    "edn":"https://github.com/josh/js-edn.git"
+    "edn": "https://github.com/josh/js-edn.git"
   }
 }

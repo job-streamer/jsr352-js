@@ -59,7 +59,7 @@ module.exports = function(grunt) {
           watch: true
         },
         files: {
-          '<%= config.dist %>/jsr-352.js': [ '<%= config.sources %>/app.js' ]
+          '<%= config.dist %>/jsr-352.js': [ '<%= config.sources %>/app-dev.js' ]
         }
       },
       app: {
@@ -96,7 +96,35 @@ module.exports = function(grunt) {
             dest: '<%= config.dist %>'
           }
         ]
+      },
+      jobstreamer: {
+        files: [
+          {
+            expand: true,
+            cwd: '<%= config.dist %>/',
+            src: ['jsr-352.min.js'],
+            dest: '../job-streamer-console/resources/job-streamer-console/public/js'
+          },
+          {
+            expand: true,
+            cwd: '<%= config.dist %>/css',
+            src: ['jsr-352.css'],
+            dest: '../job-streamer-console/resources/job-streamer-console/public/css'
+          }
+        ]
       }
+  },
+  uglify: {
+    options: {
+      beautify: false,//インデントやスペース入りでだすかどうか。
+      mangle: false,//変数置換
+      compress: true,//圧縮するかどうか。
+      sourceMap: false//ソースマップを出力するか。
+    },
+    build: {
+      src: '<%= config.dist %>/jsr-352.js',
+      dest: '<%= config.dist %>/jsr-352.min.js'
+    }
   },
   less: {
       options: {
@@ -111,18 +139,18 @@ module.exports = function(grunt) {
         }
     }
   },
-    
-    
+
+
     watch: {
       options: {
         livereload: true
       },
-      
+
       samples: {
         files: [ '<%= config.sources %>/**/*.*' ],
         tasks: [ 'copy:app' ]
       },
-      
+
       less: {
         files: [
           'styles/**/*.less',
@@ -165,10 +193,19 @@ module.exports = function(grunt) {
 
   // tasks
 
-  grunt.registerTask('build', [ 'copy','less', 'browserify:app' ]);
+  grunt.registerTask('build', [
+    'copy:diagram_js',
+    'copy:bpmn_js',
+    'copy:app',
+    'less',
+    'browserify:app',
+    'uglify:build'
+  ]);
 
   grunt.registerTask('auto-build', [
-    'copy',
+    'copy:diagram_js',
+    'copy:bpmn_js',
+    'copy:app',
     'less',
     'browserify:watch',
     'connect:livereload',
@@ -180,6 +217,8 @@ module.exports = function(grunt) {
   grunt.registerTask('auto-test', [ 'karma:unit' ]);
 
   grunt.registerTask('default', [ 'jshint', 'test', 'build' ]);
+
+  grunt.registerTask('deploy', [ 'build', 'copy:jobstreamer' ]);
 };
 
 
