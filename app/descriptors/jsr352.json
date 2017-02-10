@@ -37,12 +37,6 @@
           "name": "allow-start-if-complete",
           "isAttr": true,
           "type": "String"
-        },
-        {
-          "name": "listener",
-          "isAttr": false,
-          "isMany": true,
-          "type": "Listener"
         }
       ]
     },

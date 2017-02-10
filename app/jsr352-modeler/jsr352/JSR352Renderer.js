@@ -241,7 +241,14 @@ JSR352Renderer.prototype.drawShape = function(p, element) {
                        box: {width: 20, height: 20, x: 0, y: 0},
                        align: 'center-middle',
                        padding: 1,
-                       style: {fill: '#000000'}});
+                       style: {fill: '#ffffff'}});
+                     
+    this.renderLabel(p,extractClassName(element.businessObject.ref),
+                     {
+                       box: {width: element.width - 20, height: element.height, x: 20, y: 0},
+                       align: 'center-middle',
+                       padding: {left:22},
+                       style: {fill: '#000000'}})
     return listener;
   }
   else if (type === 'jsr352:Flow') {
