@@ -106,7 +106,7 @@ JSR352ElementFactory.prototype._getCustomElementSize = function (type) {
     'jsr352:End': { width: 40, height: 40 },
     'jsr352:Fail': { width: 40, height: 40 },
     'jsr352:Stop': { width: 40, height: 40 },
-    'jsr352:Listener': {width: 80, height: 20}
+    'jsr352:Listener': {width: 220, height: 20}
   };
 
   return shapes[type] || shapes.__default;
