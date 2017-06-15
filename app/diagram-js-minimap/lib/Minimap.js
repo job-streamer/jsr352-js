@@ -20,8 +20,8 @@ var MINIMAP_POSITION = 'right-top';
 var MINIMAP_MARGIN = '20px';
 
 var MINIMAP_DIMENSIONS = {
-  width: '320px',
-  height: '180px'
+  width: '300px',
+  height: '160px'
 };
 
 var MINIMAP_STYLES = {
@@ -105,7 +105,7 @@ function Minimap(canvas, elementRegistry, eventBus, injector, config) {
 
   this._init();
 
-  this.toggle((config && config.open) || false);
+  this.toggle(true);
 
   // cursor
   domEvent.bind(this._viewport, 'mouseenter', function() {
@@ -146,14 +146,20 @@ function Minimap(canvas, elementRegistry, eventBus, injector, config) {
       self._svgClientRect = self._svg.getBoundingClientRect();
     }
 
-    var diagramPoint = mapMousePositionToDiagramPoint({
-      x: event.clientX - self._svgClientRect.left,
-      y: event.clientY - self._svgClientRect.top
-    }, self._canvas, self._svg);
+    var boundingClientRect = self._svg.getBoundingClientRect();
+    var xPerMinimapWidth = (event.clientX - boundingClientRect.left) / boundingClientRect.width;
+    var yPerMinimapHeight = (event.clientY - boundingClientRect.top) / boundingClientRect.height;
+    var bbox = canvas.getDefaultLayer().getBBox();
+    var diagramPoint = {
+        x: bbox.width * xPerMinimapWidth,
+        y: bbox.height * yPerMinimapHeight,
+        width: bbox.width,
+        height: bbox.height
+    };
 
     setViewboxCenteredAroundPoint(diagramPoint, self._canvas);
 
-    self._update();
+    // self._update();
   }, this);
 
   // scroll canvas on drag
@@ -248,27 +254,29 @@ function Minimap(canvas, elementRegistry, eventBus, injector, config) {
 
   domEvent.bind(this._svg, 'wheel', function(event) {
 
-    // stop propagation and handle scroll differently
-    event.stopPropagation();
-
-    if (!self._svgClientRect) {
-      self._svgClientRect = self._svg.getBoundingClientRect();
-    }
-
-    var diagramPoint = mapMousePositionToDiagramPoint({
-      x: event.clientX - self._svgClientRect.left,
-      y: event.clientY - self._svgClientRect.top
-    }, self._canvas, self._svg);
-
-    setViewboxCenteredAroundPoint(diagramPoint, self._canvas);
-
-    var zoom = canvas.zoom();
-
-    var delta = event.deltaY > 0 ? 100 : -100;
-
-    canvas.zoom(Math.min(Math.max(zoom - (delta / ZOOM_SMOOTHING), MAX_ZOOM), MIN_ZOOM));
-
-    self._update();
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    //  // stop propagation and handle scroll differently
+    // event.stopPropagation();
+    //
+    // if (!self._svgClientRect) {
+    //   self._svgClientRect = self._svg.getBoundingClientRect();
+    // }
+    //
+    // var diagramPoint = mapMousePositionToDiagramPoint({
+    //   x: event.clientX - self._svgClientRect.left,
+    //   y: event.clientY - self._svgClientRect.top
+    // }, self._canvas, self._svg);
+    //
+    // setViewboxCenteredAroundPoint(diagramPoint, self._canvas);
+    //
+    // var zoom = canvas.zoom();
+    //
+    // var delta = event.deltaY > 0 ? 100 : -100;
+    //
+    // canvas.zoom(Math.min(Math.max(zoom - (delta / ZOOM_SMOOTHING), MAX_ZOOM), MIN_ZOOM));
+    //
+    // self._update();
   });
 
   domEvent.bind(this._toggle, 'mouseenter', function() {
@@ -325,19 +333,19 @@ function Minimap(canvas, elementRegistry, eventBus, injector, config) {
   });
 
   // update on viewbox changed
-  eventBus.on('canvas.viewbox.changed', function() {
-    if (!self._state.isDragging) {
-      self._update();
-    }
-  });
+  // eventBus.on('canvas.viewbox.changed', function() {
+  //   if (!self._state.isDragging) {
+  //     self._update();
+  //   }
+  // });
 
-  eventBus.on('canvas.resized', function() {
-    if (!self._state.isDragging) {
-      self._update();
-    }
-
-    self._svgClientRect = self._svg.getBoundingClientRect();
-  });
+  // eventBus.on('canvas.resized', function() {
+  //   if (!self._state.isDragging) {
+  //     self._update();
+  //   }
+  //
+  //   self._svgClientRect = self._svg.getBoundingClientRect();
+  // });
 }
 
 Minimap.$inject = [ 'canvas', 'elementRegistry', 'eventBus', 'injector', 'config.minimap' ];
@@ -398,9 +406,9 @@ Minimap.prototype._init = function() {
 
   // add viewport
   var viewport = this._viewport = svgCreate('rect');
-  domClasses(viewport).add('djs-minimap-viewport');
-  svgAttr(viewport, VIEWPORT_STYLES);
-  svgAppend(viewportGroup, viewport);
+  // domClasses(viewport).add('djs-minimap-viewport');
+  // svgAttr(viewport, VIEWPORT_STYLES);
+  // svgAppend(viewportGroup, viewport);
 
   // create toggle
   var toggle = this._toggle = document.createElement('div');
@@ -633,7 +641,7 @@ function mapMousePositionToDiagramPoint(position, canvas, svg) {
 
   // take different aspect ratios of default layers bounding box and minimap into account
   var bBox =
-    fitAspectRatio(canvas.getDefaultLayer().getBBox(), boundingClientRect.width / boundingClientRect.height);
+      fitAspectRatio(canvas.getDefaultLayer().getBBox(), boundingClientRect.width / boundingClientRect.height);
 
   // map click position to diagram position
   var diagramX = map(position.x, 0, boundingClientRect.width, bBox.x, bBox.x + bBox.width),
