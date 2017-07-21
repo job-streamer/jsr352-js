@@ -142,20 +142,15 @@ function Minimap(canvas, elementRegistry, eventBus, injector, config) {
   // set viewbox on click
   domEvent.bind(this._svg, 'click', function(event) {
 
-    if (!self._svgClientRect) {
-      self._svgClientRect = self._svg.getBoundingClientRect();
-    }
+    // if (!self._svgClientRect) {
+    //   self._svgClientRect = self._svg.getBoundingClientRect();
+    // }
 
     var boundingClientRect = self._svg.getBoundingClientRect();
-    var xPerMinimapWidth = (event.clientX - boundingClientRect.left) / boundingClientRect.width;
-    var yPerMinimapHeight = (event.clientY - boundingClientRect.top) / boundingClientRect.height;
-    var bbox = canvas.getDefaultLayer().getBBox();
-    var diagramPoint = {
-        x: bbox.width * xPerMinimapWidth,
-        y: bbox.height * yPerMinimapHeight,
-        width: bbox.width,
-        height: bbox.height
-    };
+    var diagramPoint = mapMousePositionToDiagramPoint({
+        x: event.clientX - boundingClientRect.left,
+        y: event.clientY - boundingClientRect.top
+    }, self._canvas, self._svg);
 
     setViewboxCenteredAroundPoint(diagramPoint, self._canvas);
 
