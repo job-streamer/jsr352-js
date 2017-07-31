@@ -40,6 +40,7 @@ function JSR352Updater(eventBus, bpmnjs, elementFactory, bpmnFactory) {
     Collections.add(parent.businessObject.flowElements, shape.businessObject);
     Collections.add(bpmnjs._customElements, shape.businessObject);
     assign(shape.businessObject.di.bounds,pick(shape, [ 'x', 'y', 'width','height' ]));
+    shape.businessObject.di.$parent = parent.businessObject.di.$parent;
     Collections.add(bpmnjs.definitions.diagrams["0"].plane.planeElement, shape.businessObject.di);
   }
 
