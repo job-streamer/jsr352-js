@@ -1,11 +1,13 @@
 'use strict';
 
 var reduce = require('lodash/collection/reduce'),
+    any = require('lodash/collection/any'),
     every = require('lodash/collection/every'),
     inherits = require('inherits');
 
 var is = require('bpmn-js/lib/util/ModelUtil').is,
-    isAny = require('bpmn-js/lib/features/modeling/util/ModelingUtil').isAny;
+    isAny = require('bpmn-js/lib/features/modeling/util/ModelingUtil').isAny,
+    isExpanded = require('bpmn-js/lib/util/DiUtil').isExpanded;
 
 var BpmnRules = require('bpmn-js/lib/features/rules/BpmnRules');
 
@@ -75,9 +77,32 @@ JSR352Rules.prototype.init = function() {
     if (isAny(shape, ['jsr352:Step'])) {
       return isAny(target, ['jsr352:Flow', 'jsr352:Job']);
     } else if (is(shape, 'jsr352:Listener')) {
-      return isAny(target, ['jsr352:Step']);
+      return isAny(target, ['jsr352:Step', 'jsr352:Job']);
     } else if (is(shape, 'jsr352:Flow')) {
-      return isAny(target, ['jsr352:Split', 'jsr352:Job']);
+      return isAny(target, ['jsr352:Split', 'jsr352:Job', 'jsr352:Flow']);
+    } else if (isAny(shape, ['jsr352:Batchlet', 'jsr352:Chunk'])) {
+      return isAny(target, ['jsr352:Step']) && hasNoChildren(target, shape);
+    } else if (isAny(shape, ['jsr352:Reader', 'jsr352:Processor', 'jsr352:Writer'])) {
+      return isAny(target, ['jsr352:Chunk']);
+    } else if (isAny(shape, ['jsr352:Split'])) {
+      return isAny(target, ['jsr352:Flow', 'jsr352:Job']);
+    } else {
+      return isAny(target, ['jsr352:Job']);
+    }
+  }
+
+  function canAttach(shape, target){
+    // only judge about custom elements
+    if (!isJSR352(shape) || !target) {
+      return;
+    }
+
+    if (isAny(shape, ['jsr352:Step'])) {
+      return isAny(target, ['jsr352:Flow', 'jsr352:Job']);
+    } else if (is(shape, 'jsr352:Listener')) {
+      return isAny(target, ['jsr352:Step', 'jsr352:Job']);
+    } else if (is(shape, 'jsr352:Flow')) {
+      return isAny(target, ['jsr352:Split', 'jsr352:Job', 'jsr352:Flow']);
     } else if (isAny(shape, ['jsr352:Batchlet', 'jsr352:Chunk'])) {
       return isAny(target, ['jsr352:Step']) && hasNoChildren(target, shape);
     } else if (isAny(shape, ['jsr352:Reader', 'jsr352:Processor', 'jsr352:Writer'])) {
@@ -85,6 +110,54 @@ JSR352Rules.prototype.init = function() {
     } else {
       return isAny(target, ['jsr352:Job']);
     }
+  }
+
+  function canCopy(collection, element) {
+    if (is(element, 'bpmn:Lane') && !contains(collection, element.parent)) {
+      return false;
+    }
+
+    if (is(element, 'bpmn:BoundaryEvent') && !contains(collection, element.host)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  function canPaste(tree, target) {
+
+    var topLevel = tree[0],
+        participants;
+
+    if (is(target, 'bpmn:Collaboration')) {
+      return every(topLevel, function(e) {
+        return e.type === 'bpmn:Participant';
+      });
+    }
+
+    if (is(target, 'bpmn:Process')) {
+      participants = any(topLevel, function(e) {
+        return e.type === 'bpmn:Participant';
+      });
+
+      return !(participants && target.children.length > 0);
+    }
+
+    // disallow to create elements on collapsed pools
+    if (is(target, 'bpmn:Participant') && !isExpanded(target)) {
+      return false;
+    }
+
+    if (is(target, 'bpmn:FlowElementsContainer')) {
+      return isExpanded(target);
+    }
+
+    return isAny(target, [
+      'bpmn:Collaboration',
+      'bpmn:Lane',
+      'bpmn:Participant',
+      'bpmn:Process',
+      'bpmn:SubProcess' ]);
   }
 
   this.addRule('elements.move', HIGH_PRIORITY, function(context) {
@@ -123,7 +196,8 @@ JSR352Rules.prototype.init = function() {
   this.addRule('shape.resize', HIGH_PRIORITY, function(context) {
     var shape = context.shape;
 
-    if (isJSR352(shape) && !isAny(shape, ['jsr352:Flow', 'jsr352:Split', 'jsr352:Step'])) {
+    if (isJSR352(shape) && !isAny(shape, ['jsr352:Flow', 'jsr352:Split', 'jsr352:Step', 'jsr352:TextBox', 'jsr352:Listener',
+          'jsr352:Reader', 'jsr352:Writer', 'jsr352:Processor', 'jsr352:Chunk', 'jsr352:Batchlet'])) {
       // cannot resize custom elements
       return false;
     }
@@ -150,6 +224,34 @@ JSR352Rules.prototype.init = function() {
         target = context.hover || context.target;
 
     return canConnect(source, target, connection);
+  });
+
+  this.addRule('element.copy', HIGH_PRIORITY, function(context) {
+    var collection = context.collection,
+        element = context.element;
+
+    return canCopy(collection, element);
+  });
+
+  this.addRule('element.paste', function(context) {
+    var parent = context.parent,
+        element = context.element,
+        position = context.position,
+        source = context.source,
+        target = context.target;
+
+    if (source || target) {
+      return canConnect(source, target);
+    }
+
+    return canAttach([ element ], parent, null, position) || canCreate(element, parent, null, position);
+  });
+
+  this.addRule('elements.paste', function(context) {
+    var tree = context.tree,
+        target = context.target;
+
+    return canPaste(tree, target);
   });
 
 };
