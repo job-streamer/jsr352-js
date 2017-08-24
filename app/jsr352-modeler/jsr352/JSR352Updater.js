@@ -66,9 +66,11 @@ function JSR352Updater(eventBus, bpmnjs, elementFactory, bpmnFactory) {
       Collections.add(customElements, businessObject);
       if (e.command == 'shape.create') {
         if (is(shape, 'jsr352:Chunk')) {
-          createChildShape('jsr352:Reader', shape, {x: 5, y: 5});
-          createChildShape('jsr352:Writer', shape, {x: 5, y: 30});
-          createChildShape('jsr352:Processor', shape, {x: 5, y: 55});
+          if(!shape.businessObject.copied){
+            createChildShape('jsr352:Reader', shape, {x: 5, y: 5});
+            createChildShape('jsr352:Writer', shape, {x: 5, y: 30});
+            createChildShape('jsr352:Processor', shape, {x: 5, y: 55});
+          }
         }
       }
     }

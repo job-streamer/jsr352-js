@@ -529,7 +529,7 @@ Minimap.prototype._addElement = function(element) {
     var index = getIndexOfChildInParentChildren(elementGfx, parentGfx);
 
     // index can be 0
-    if (index !== 'undefined') {
+    if (typeof index !== 'undefined') {
       if (newElementParentGfx) {
         insertChildAtIndex(newElementGfx, newElementParentGfx, index);
       } else {
