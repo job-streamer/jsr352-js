@@ -19,7 +19,8 @@ var eventProps = require('bpmn-js-properties-panel/lib/provider/bpmn/parts/Event
 var stepProps = require('./parts/StepProps'),
     listenerProps = require('./parts/ListenerProps'),
     restartbleProps = require('./parts/RestartableProps'),
-    transitionProps = require('./parts/TransitionProps');
+    transitionProps = require('./parts/TransitionProps'),
+    restartProps = require('./parts/RestartProps');
 
 // The general tab contains all bpmn relevant properties.
 // The properties are organized in groups.
@@ -36,7 +37,8 @@ function createGeneralTabGroups(element, bpmnFactory, elementRegistry) {
   stepProps(generalGroup, element, bpmnFactory);
   listenerProps(generalGroup, element, bpmnFactory);
   transitionProps(generalGroup, element);
-  restartbleProps(generalGroup, element)
+  restartbleProps(generalGroup, element);
+  restartProps(generalGroup, element);
 
   var detailsGroup = {
     id: 'details',
