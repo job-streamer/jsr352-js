@@ -73,24 +73,24 @@
         {
           "name": "item-count",
           "isAttr": true,
-          "type": "Integer",
-          "default": 10
+          "type": "String",
+          "default": "10"
         },
         {
           "name": "time-limit",
           "isAttr": true,
-          "type": "Integer",
-          "default": 0
+          "type": "String",
+          "default": "0"
         },
         {
           "name": "skip-limit",
           "isAttr": true,
-          "type": "Integer"
+          "type": "String"
         },
         {
           "name": "retry-limit",
           "isAttr": true,
-          "type": "Integer"
+          "type": "String"
         }
       ]
     },

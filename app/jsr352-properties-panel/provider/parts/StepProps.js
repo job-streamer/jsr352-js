@@ -12,7 +12,7 @@ var componentProvider = require('../../../util/ComponentProvider');
 var selectOptionUtil = require('../../../util/SelectOptionUtil');
 
 function chunkChildEntry(element, bpmnFactory, id) {
-  var typeName = id.replace(/\b\w/g, function(l){ return l.toUpperCase() })
+  var typeName = id.replace(/\b\w/g, function(l){ return l.toUpperCase() });
   var entry = entryFactory.textBox({
     id : id,
     description : 'Specifies the name of a ' + id + ' artifact.',
@@ -134,10 +134,7 @@ module.exports = function(group, element, bpmnFactory) {
       },
       setProperty: function(element, properties) {
         var bo = getBusinessObject(element);
-        if (properties['item-count']) {
-          properties['item-count'] = parseInt(properties['item-count']);
-          return cmdHelper.updateBusinessObject(element, bo, properties);
-        }
+        return cmdHelper.updateBusinessObject(element, bo, properties);
       },
       validate: function(element, values) {
         var isValid = /^[0-9]+$/.test(values['item-count']);
