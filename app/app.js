@@ -7,7 +7,8 @@ var propertiesPanelModule = require('bpmn-js-properties-panel'),
     camundaModdleDescriptor = require('camunda-bpmn-moddle/resources/camunda'),
     jsr352ModdleDescriptor = require('./descriptors/jsr352'),
     minimapModule = require('./diagram-js-minimap'),
-    copypasteModule = require('./copy-paste');
+    copypasteModule = require('./copy-paste'),
+    zoomScrollModule = require('./zoom-scroll');
 
 
 var modeler = new JSR352Modeler({
@@ -20,7 +21,8 @@ var modeler = new JSR352Modeler({
     propertiesPanelModule,
     propertiesProviderModule,
     minimapModule,
-    copypasteModule
+    copypasteModule,
+    zoomScrollModule
   ],
   moddleExtensions: {
     jsr352: jsr352ModdleDescriptor,
